@@ -49,6 +49,9 @@ class MinimalPublisher(Node):
         self.ranging1 =None
         self.ranging2 =None
         self.measureoffset= 0.34
+        self.robot_0_0_height = 0
+        self.robot_0_1_height = 0
+        self.robot_0_2_height = 0
         
         super().__init__('uwb_publisher')
         self.publisher_ = self.create_publisher(Uwbranging, 'uwb_distance', 10)
@@ -56,9 +59,9 @@ class MinimalPublisher(Node):
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
     def twr_log(self, timestamp, data, logconf):
-        self.ranging0 = data['ranging.distance0'] + self.measureoffset
-        self.ranging1 = data['ranging.distance1'] + self.measureoffset
-        self.ranging2 = data['ranging.distance2'] + self.measureoffset
+        self.ranging0 = ((data['ranging.distance0'] + self.measureoffset)**2-self.robot_0_0_height**2)**0.5
+        self.ranging1 = ((data['ranging.distance1'] + self.measureoffset)**2-self.robot_0_1_height**2)**0.5
+        self.ranging2 = ((data['ranging.distance2'] + self.measureoffset)**2-self.robot_0_2_height**2)**0.5
         #print('[%d][%s]: %s' % (timestamp, logconf, data))
     def timer_callback(self):
         msg = Uwbranging()
