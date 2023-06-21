@@ -27,7 +27,8 @@ from cflib.crazyflie.log import LogConfig
 from cflib.crazyflie.syncCrazyflie import SyncCrazyflie
 from cflib.utils import uri_helper
 from cflib.crazyflie.syncLogger import SyncLogger
-uri = 'usb://0'
+#uri = 'radio://0/60/250K/E7E7E7E701'
+uri =  'usb://0'
 # Only output errors from the logging framework
 logging.basicConfig(level=logging.ERROR)
 cflib.crtp.init_drivers(enable_debug_driver=False)
@@ -54,8 +55,8 @@ class MinimalPublisher(Node):
         self.robot_0_2_height = 0
         
         super().__init__('uwb_publisher')
-        self.publisher_ = self.create_publisher(Uwbranging, 'uwb_distance', 10)
-        timer_period = 0.5  # seconds
+        self.publisher_ = self.create_publisher(Uwbranging, '/cslam/Uwbranging', 10)
+        timer_period = 0.1  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
     def twr_log(self, timestamp, data, logconf):
